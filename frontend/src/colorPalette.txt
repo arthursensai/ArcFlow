@@ -1,0 +1,12 @@
+| Purpose                 | Color Preview                                            | HEX Code  | Notes                 |
+| ----------------------- | -------------------------------------------------------- | --------- | --------------------- |
+| **Primary (Logo Blue)** | ![#1fb6ff](https://via.placeholder.com/20/1fb6ff?text=+) | `#1FB6FF` | Matches ArcFlow “A”   |
+| **Accent Cyan**         | ![#00c2ff](https://via.placeholder.com/20/00c2ff?text=+) | `#00C2FF` | Glow effects, hover   |
+| **Dark Background**     | ![#0e0e12](https://via.placeholder.com/20/0e0e12?text=+) | `#0E0E12` | Page background       |
+| **Surface Dark**        | ![#1c1c26](https://via.placeholder.com/20/1c1c26?text=+) | `#1C1C26` | Cards, panels         |
+| **Text Main**           | ![#e4e4e7](https://via.placeholder.com/20/e4e4e7?text=+) | `#E4E4E7` | Light text            |
+| **Text Muted**          | ![#9ca3af](https://via.placeholder.com/20/9ca3af?text=+) | `#9CA3AF` | Secondary text        |
+| **Success Green**       | ![#10b981](https://via.placeholder.com/20/10b981?text=+) | `#10B981` | Streaks, progress     |
+| **Warning Orange**      | ![#f97316](https://via.placeholder.com/20/f97316?text=+) | `#F97316` | Alerts                |
+| **Error Red**           | ![#ef4444](https://via.placeholder.com/20/ef4444?text=+) | `#EF4444` | Failed task, errors   |
+| **Highlight Glow**      | ![#60efff](https://via.placeholder.com/20/60efff?text=+) | `#60EFFF` | For neon/glow touches |
