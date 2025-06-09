@@ -3,9 +3,9 @@
 > Transform discipline into a lifestyle with ArcFlow's powerful habit tracking and personal growth system.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![React](https://img.shields.io/badge/React-18.0+-blue.svg)](https://reactjs.org/)
+[![React](https://img.shields.io/badge/React-19.0+-blue.svg)](https://reactjs.org/)
 [![Node.js](https://img.shields.io/badge/Node.js-16.0+-green.svg)](https://nodejs.org/)
-[![Firebase](https://img.shields.io/badge/Firebase-9.0+-orange.svg)](https://firebase.google.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-6.0+-green.svg)](https://mongodb.com/)
 
 ArcFlow is a minimalist yet powerful **habit tracking web application** designed to help users build sustainable routines, achieve long-term goals, and visualize their personal growth journey. Built with modern web technologies and a focus on user experience, ArcFlow turns the challenge of habit formation into an engaging and rewarding process.
 
@@ -62,16 +62,21 @@ In a world full of distractions, building consistent habits is the foundation of
 ## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** - Modern UI library with hooks
-- **Tailwind CSS** - Utility-first CSS framework
+- **React 19** - Modern UI library with hooks
+- **Tailwind CSS 4** - Utility-first CSS framework
 - **Lucide React** - Beautiful, customizable icons
-- **Vite** - Fast build tool and dev server
+- **Vite 6** - Fast build tool and dev server
+- **React Router 7** - Client-side routing
+- **React Hook Form** - Form management
+- **React Calendar** - Calendar components
+- **Radix UI** - Accessible UI primitives
 
 ### Backend
 - **Node.js** - JavaScript runtime
-- **Express.js** - Web application framework
-- **Firebase Auth** - Secure user authentication
-- **Firestore** - NoSQL cloud database
+- **Express.js 5** - Web application framework
+- **MongoDB** - NoSQL database with Mongoose ODM
+- **JWT** - Secure authentication tokens
+- **bcryptjs** - Password hashing
 
 ### Development Tools
 - **ESLint** - Code linting and formatting
@@ -112,28 +117,24 @@ Ensure you have the following installed:
    
    Create `.env` file in the `frontend/` directory:
    ```env
-   VITE_FIREBASE_API_KEY=your-firebase-api-key
-   VITE_FIREBASE_AUTH_DOMAIN=your-project.firebaseapp.com
-   VITE_FIREBASE_PROJECT_ID=your-project-id
-   VITE_FIREBASE_STORAGE_BUCKET=your-project.appspot.com
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your-sender-id
-   VITE_FIREBASE_APP_ID=your-app-id
+   VITE_API_URL=http://localhost:5000/api
    ```
 
-   For backend (optional), create `.env` in `backend/` directory:
+   For backend, create `.env` in `backend/` directory:
    ```env
    PORT=5000
-   MONGO_URI=your-mongodb-connection-string
-   FIREBASE_SERVICE_ACCOUNT_KEY=path/to/service-account.json
+   MONGODB_STRING=mongodb://localhost:27017/arcflow
+   FRONTEND_URL=http://localhost:5173
+   JWT_SECRET=your-super-secret-jwt-key
    ```
 
-4. **Start the development server**
+4. **Start the development servers**
    ```bash
-   # Frontend (from frontend/ directory)
+   # Backend (from backend/ directory)
    npm run dev
    
-   # Backend (from backend/ directory)
-   npm start
+   # Frontend (from frontend/ directory - in a new terminal)
+   npm run dev
    ```
 
 5. **Open your browser**
@@ -278,8 +279,8 @@ ArcFlow supports all modern browsers:
 ## 🔒 Privacy & Security
 
 Your privacy matters. ArcFlow:
-- Stores data securely using Firebase
-- Implements industry-standard authentication
+- Stores data securely using MongoDB
+- Implements JWT-based authentication
 - Doesn't track or sell personal information
 - Provides data export functionality
 
@@ -288,15 +289,6 @@ Your privacy matters. ArcFlow:
 ## 📄 License
 
 This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- **Jim Rohn** - For the inspirational quote that guides this project
-- **Firebase Team** - For providing excellent backend infrastructure
-- **React Community** - For the amazing ecosystem and resources
-- **Open Source Contributors** - For making development tools accessible
 
 ---
 
@@ -309,7 +301,8 @@ Passionate about building tools that empower discipline, creativity, and persona
 
 **Connect with me:**
 - GitHub: [@arthursensai](https://github.com/arthursensai)
-- Email: [your-email@example.com](mailto:your-email@example.com)
+- Instagram: [@arthur_sensai](https://instagram.com/arthur_sensai)
+- Email: [mohamedaytsidibah@gmail.com](mailto:mohamedaytsidibah@gmail.com)
 
 ---
 
