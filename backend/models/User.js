@@ -39,7 +39,13 @@ UserShema.statics.login = async function(email, password) {
         throw Error("password incorrect");
     }
     throw Error("email doesn't exist");
+};
 
+UserShema.statics.changeUsername = async function(userID, newUsername){
+    return this.findByIdAndUpdate( userID,
+    { $set: { username: newUsername } },
+    { new : true }
+  );
 };
 
 const User = mongoose.model('user', UserShema);

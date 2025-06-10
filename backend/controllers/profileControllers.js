@@ -154,6 +154,19 @@ const updateTotalMinutes = async (req, res) => {
     }
 };
 
+//update username
+const changeUsername = async (req, res) => {
+    const userID = await checkUserToken(req);
+    if(!userID) return res.status(400).json({ loggedIn: false });
+    try{
+        const { newUsername } = req.body;
+        const newUser = await User.changeUsername(userID, newUsername);
+        res.status(200).json({ newUser });
+    } catch (err){
+        return res.status(500).json({ err });
+    }
+};
+
 module.exports = {
     habits_get,
     habit_get,
@@ -161,5 +174,6 @@ module.exports = {
     habit_todo_post,
     habit_todo_delete,
     updateTodoCompletion,
-    updateTotalMinutes
+    updateTotalMinutes,
+    changeUsername
 }
