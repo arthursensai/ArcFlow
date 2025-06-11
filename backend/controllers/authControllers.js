@@ -5,6 +5,25 @@ const jwt = require('jsonwebtoken');
 const frontendURL = process.env.FRONTEND_URL;
 const JWT_SECRET = process.env.JWT_SECRET;
 
+const checkToken = async (req, res) => {
+    const token = req.cookies.jwt;
+
+    if (!token) return res.status(401).json({ loggedIn: false });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+
+        const user = await User.findById(decoded.id).select('-password');
+        if (!user) {
+        return res.status(404).json({ loggedIn: false });
+        }
+
+        res.json({ loggedIn: true, userData: { username: user.username, userID: user._id } });
+    } catch (err) {
+        res.status(401).json({ loggedIn: false });
+    }
+};
+
 //hadnle signup errors function
 const handlSignUpErrors = (err) => {
     let errors = { email: '', password: '', username: ''};
@@ -89,25 +108,6 @@ const signup_get = (req, res) => {
 
 const login_get = (req, res) => {
     res.redirect(frontendURL + '/login');
-};
-
-const checkToken = async (req, res) => {
-    const token = req.cookies.jwt;
-
-    if (!token) return res.status(401).json({ loggedIn: false });
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-
-        const user = await User.findById(decoded.id).select('-password');
-        if (!user) {
-        return res.status(404).json({ loggedIn: false });
-        }
-
-        res.json({ loggedIn: true, userData: { username: user.username, userID: user._id } });
-    } catch (err) {
-        res.status(401).json({ loggedIn: false });
-    }
 };
 
 const logout = (req, res) => {

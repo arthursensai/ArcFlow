@@ -7,7 +7,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 //check if the user exits
 const checkUserToken = async (req) => {
     const token = req.cookies.jwt;
-    console.log(req.cookies)
 
     if (!token) { return null };
     
@@ -42,6 +41,7 @@ const habits_get = async (req, res) => {
 //get a habit 
 const habit_get = async (req, res) => {
     const { habitID } = req.cookies;
+    console.log(habitID)
     const userID = await checkUserToken(req);
     if(!habitID) { return res.status(400).json({ err: 'no valid habitID' }); };
     if(userID !== null) {

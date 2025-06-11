@@ -1,11 +1,6 @@
-import { useState, useEffect } from 'react';
 import { ListTodo , CheckCircle2, Plus, X, AlertCircle, Loader2 } from 'lucide-react';
-import axios from 'axios';
 import TodosComponent from './TodosComponent';
 import MusicPanel from "./MusicPanel";
-
-const mainUrl = import.meta.env.VITE_API_URL;
-axios.defaults.withCredentials = true;
 
 const Todos = (props) => {
   console.log(props.todos)
