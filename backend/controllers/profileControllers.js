@@ -38,25 +38,29 @@ const habits_get = async (req, res) => {
     return res.status(400).json({ loggedIn: false });
 };
 
-//get a habit 
-// GET /profile/habit?habitID=123
+// controllers/profileControllers.js
 const habit_get = async (req, res) => {
     const { habitID } = req.query;
-    console.log(habitID)
+    console.log("habitID from query:", habitID);
+
     const userID = await checkUserToken(req);
 
-    if(!habitID) return res.status(400).json({ err: 'no valid habitID' });
+    if (!habitID) {
+        return res.status(400).json({ err: 'no valid habitID' });
+    }
 
-    if(userID !== null) {
+    if (userID !== null) {
         try {
             const habit = await Habit.getHabitByID(habitID);
             return res.status(200).json({ habit });
         } catch (err) {
-            return res.status(401).json({ err });
+            return res.status(401).json({ err: "Habit not found or DB error" });
         }
     }
+
     return res.status(400).json({ loggedIn: false });
 };
+
 
 //create a habit
 const habit_post = async (req, res) => {
