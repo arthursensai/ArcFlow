@@ -59,7 +59,7 @@ const Login = () => {
             const result = await signup(authData);
             if (result?.success) {
                 setSuccessMessage("Account created successfully!");
-                console.log("Signup success!", result);
+                console.log("Signup success!");
                 navigate('/dashboard');
             } else {
                 const errors = result.errors || {};

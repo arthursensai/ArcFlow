@@ -6,8 +6,7 @@ import TodosPanel from '../Components/TodosPanel';
 const Habit = () => {
     const { habitData, habitDataLoading, habitDataError } = useHabit();
     const todos = habitData.todos;
-    console.log(habitData)
-    console.log('todos:' + todos)
+    
     if(habitDataLoading){ return <p>loading data...</p>}
     if(habitData == null){ return <p>Something went wrong, Try again...</p>}
     return (

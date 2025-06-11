@@ -6,7 +6,7 @@ const mainUrl = import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
 
 const useHabit = () => {
-    console.log(getCurrentHabit())
+    const currentHabit = getCurrentHabit();
     const [habitData, setHabitData] = useState({});
     const [habitDataLoading, setHabitDataLoading] = useState(false);
     const [habitDataError, setHabitDataError] = useState(null);
@@ -15,7 +15,7 @@ const useHabit = () => {
             setHabitDataLoading(true);
             try {
                 const response = await axios.get(`${mainUrl}/profile/habit`, {
-                    params: { habitID: getCurrentHabit() }
+                    params: { habitID: currentHabit }
                 });
                 setHabitData(response.data.habit);
                 setHabitDataError(null);

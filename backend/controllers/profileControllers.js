@@ -41,7 +41,6 @@ const habits_get = async (req, res) => {
 // controllers/profileControllers.js
 const habit_get = async (req, res) => {
     const { habitID } = req.query;
-    console.log("habitID from query:", habitID);
 
     const userID = await checkUserToken(req);
 
@@ -150,8 +149,7 @@ const updateTotalMinutes = async (req, res) => {
         const userID = await checkUserToken(req);
         const { habitID } = req.cookies;
         const { minutesToAdd } = req.body;
-        console.log(userID, habitID, minutesToAdd);
-
+        
         if (!userID) return res.status(400).json({ loggedIn: false });
         if (!habitID) return res.status(400).json({ err: "No valid habit." });
         
