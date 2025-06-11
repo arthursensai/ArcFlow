@@ -10,10 +10,13 @@ const axios = require('axios');
 //declare app
 const app = express();
 
+//import frontend URL
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
 //middlewares
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));
