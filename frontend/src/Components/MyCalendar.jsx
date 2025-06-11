@@ -106,11 +106,10 @@ const MyCalendar = () => {
   ).length;
 
   return (
-    <div className="bg-surface rounded-xl p-6 border border-gray-700 shadow-lg">
+    <div className="bg-surface rounded-xl p-6 shadow-2xl border-2 border-primary w-full self-center">
       {/* Header */}
       <div className="mb-4">
         <h3 className="text-lg font-semibold text-text mb-1">Calendar</h3>
-        <p className="text-sm text-muted">Track your progress</p>
       </div>
       
       {/* Calendar Navigation */}

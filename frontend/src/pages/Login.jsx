@@ -250,18 +250,6 @@ const Login = () => {
                             </div>
                         )}
 
-                        {/* Forgot Password Link (only for login) */}
-                        {isLogin && (
-                            <div className="text-right">
-                                <button
-                                    type="button"
-                                    className="text-sm text-cyan-400 hover:text-cyan-300 transition-colors"
-                                >
-                                    Forgot Password?
-                                </button>
-                            </div>
-                        )}
-
                         {/* Submit Button */}
                         <button
                             type="button"
