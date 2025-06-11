@@ -39,11 +39,14 @@ const habits_get = async (req, res) => {
 };
 
 //get a habit 
+// GET /profile/habit?habitID=123
 const habit_get = async (req, res) => {
-    const { habitID } = req.body;
+    const { habitID } = req.query;
     console.log(habitID)
     const userID = await checkUserToken(req);
-    if(!habitID) { return res.status(400).json({ err: 'no valid habitID' }); };
+
+    if(!habitID) return res.status(400).json({ err: 'no valid habitID' });
+
     if(userID !== null) {
         try {
             const habit = await Habit.getHabitByID(habitID);

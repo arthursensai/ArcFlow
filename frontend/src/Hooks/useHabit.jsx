@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from 'axios';
+import { getCurrentHabit } from "../Utils/CookieUtil";
 
 const mainUrl = import.meta.env.VITE_API_URL;
 axios.defaults.withCredentials = true;
@@ -12,7 +13,10 @@ const useHabit = () => {
         const fetchData = async () => {
             setHabitDataLoading(true);
             try {
-                const response = await axios.get(mainUrl + '/profile/habit');
+                const response = await axios.get(`${mainUrl}/profile/habit`, {
+                    params: { habitID: getCurrentHabit() }
+                });
+                
                 setHabitData(response.data.habit);
                 setHabitDataError(null);
             } catch (err){
