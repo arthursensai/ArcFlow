@@ -7,7 +7,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 //check if the user exits
 const checkUserToken = async (req) => {
     const token = req.cookies.jwt;
-    console.log(req)
+    console.log(req.cookies)
 
     if (!token) { return null };
     
