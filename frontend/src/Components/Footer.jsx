@@ -1,6 +1,6 @@
 import { Settings, Plus } from 'lucide-react';
 import * as Dialog from '@radix-ui/react-dialog';
-import SettingsDialog from './SettingsDialog';
+import SettingsDialog from './SettingsDialog.jsx';
 import NewHabitDialog from './NewHabitDialog';
 import useQuote from '../Hooks/useQuote';
 
