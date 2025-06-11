@@ -40,7 +40,7 @@ const habits_get = async (req, res) => {
 
 //get a habit 
 const habit_get = async (req, res) => {
-    const { habitID } = req.cookies;
+    const { habitID } = req.body;
     console.log(habitID)
     const userID = await checkUserToken(req);
     if(!habitID) { return res.status(400).json({ err: 'no valid habitID' }); };
