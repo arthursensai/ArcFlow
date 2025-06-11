@@ -6,7 +6,6 @@ import useQuote from '../Hooks/useQuote';
 
 const Footer = () => {
     const { quote, author, quoteError } = useQuote();
-    
     return (
         <footer className="fixed bottom-0 left-0 right-0 px-6 py-4 border-t-2 border-primary bg-surface/95 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto flex items-center justify-between">
