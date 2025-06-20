@@ -1,14 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { habits_get, habit_get, habit_post, habit_todo_post, habit_todo_delete, updateTodoCompletion, updateTotalMinutes, changeUsername } = require('../controllers/profileControllers');
+const { changeUsername, getUserData, checkUserAuth } = require('../controllers/profileControllers');
+const requireAuth = require('../middlewares/requireAuth');
 
-router.get("/habits", habits_get);
-router.get("/habit", habit_get);
-router.post("/createHabit", habit_post);
-router.post("/createNewTodo", habit_todo_post);
-router.delete("/deleteTodo", habit_todo_delete);
-router.put("/updateTodoCompletion", updateTodoCompletion);
-router.put("/updateTotalMinutes", updateTotalMinutes);
-router.post("/changeUsername", changeUsername);
+router.get("/", requireAuth, getUserData);
+router.put("/username", requireAuth, changeUsername);
+router.get("/check", requireAuth, checkUserAuth);
 
 module.exports = router;

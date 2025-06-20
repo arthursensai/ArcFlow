@@ -1,31 +1,23 @@
 const User = require('../models/User');
-const jwt = require('jsonwebtoken');
+const { signupSchema, loginSchema } = require('../Validators/userValidation');
+const createToken = require('../utils/jwt');
+const setAuthCookie = require('../utils/cookie');
 
 //declaring .env variables
 const frontendURL = process.env.FRONTEND_URL;
-const JWT_SECRET = process.env.JWT_SECRET;
+const isProduction = process.env.NODE_ENV === 'production';
 
-const checkToken = async (req, res) => {
-    const token = req.cookies.jwt;
+//redirecting auth get requests to the frontend page
+const signup_get = (req, res) => {
+    res.redirect(frontendURL + '/login');
+};
 
-    if (!token) return res.status(401).json({ loggedIn: false });
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-
-        const user = await User.findById(decoded.id).select('-password');
-        if (!user) {
-        return res.status(404).json({ loggedIn: false });
-        }
-
-        res.json({ loggedIn: true, userData: { username: user.username, userID: user._id } });
-    } catch (err) {
-        res.status(401).json({ loggedIn: false });
-    }
+const login_get = (req, res) => {
+    res.redirect(frontendURL + '/login');
 };
 
 //hadnle signup errors function
-const handlSignUpErrors = (err) => {
+const handleSignUpErrors = (err) => {
     let errors = { email: '', password: '', username: ''};
 
     //duplicate email
@@ -44,77 +36,68 @@ const handlSignUpErrors = (err) => {
 };
 
 //hadnle login errors function
-const handlLoginErrors = (err) => {
+const handleLoginErrors = (err) => {
     let errors = { email: '', password: '' };
 
-     if(err.message.includes('email')){
-        errors['email'] = err.message;
+    if (err.message.includes('email') || err.message.includes('user')) {
+        errors.email = 'Email not found';
     }
-    if(err.message.includes('password')){
-        errors['password'] = err.message;
+    if (err.message.includes('password')) {
+        errors.password = 'Incorrect password';
     }
 
     return errors;
 };
 
-//this "createToken" function will be responsible for creating jwt for the users
-const maxAge = 3 * 24 * 60 * 60;
-const createToken = (id) => {
-    return jwt.sign({ id }, JWT_SECRET, {
-        expiresIn: maxAge
-    })
-};
-
 //handling sign up requests
 const signup_post = async (req, res) => {
-    const { email, password, username } = req.body;
-    console.log('new signup request!');
-    try {
-        const user = await User.create({ email, password, username});
-        //create a jwt for the user
+    const { error, value } = signupSchema.validate(req.body);
+    if(error) {
+        return res.status(400).json({ errorDetails: {
+        context: error.details[0].path,
+        message: error.details[0].message
+    }})};
+    const { username, email, password } = value;
+        try {
+        const user = await User.signup(username, email, password);
         const token = createToken(user._id);
-        //send the jwt cookie to the user
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-        //send a success message and console.log it
-        res.status(201).json({ message: 'user signed up successfully'});
-        console.log("New User added successfully! 🔥");
+        setAuthCookie(res, token);
+        res.status(201).json({ message: 'User signed up successfully'});
+        console.log("New Signup!");
     } catch (err) {
-        const errors = handlSignUpErrors(err);
+        const errors = handleSignUpErrors(err);
         res.status(400).json({ errors });
     }
 }
 
-//handling login requests | needs fixing |
+//handling login requests 
 const login_post = async (req, res) => {
-    const { email, password } = req.body;
-    console.log('new Login request!');
+    const { error, value } = loginSchema.validate(req.body);
+    if(error) {
+        return res.status(400).json({ errorDetails: {
+        context: error.details[0].path,
+        message: error.details[0].message
+    }})};
+    const { email, password } = value;
     try {
         const user = await User.login(email, password);
-        //create a jwt for the user
         const token = createToken(user._id);
-        //send the jwt cookie to the user
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000, secure: true, sameSite: 'none' });
-        res.status(200).json({ message: 'User logged in successfully'})
+        setAuthCookie(res, token);
+        res.status(200).json({ message: 'User logged in successfully'});
+        console.log('New Login!');
     } catch (err) {
-        const errors = handlLoginErrors(err);
+        const errors = handleLoginErrors(err);
         res.status(400).json({ errors });
     }
 };
 
-//redirecting auth get requests to the frontend page
-const signup_get = (req, res) => {
-    res.redirect(frontendURL + '/login');
-};
-
-const login_get = (req, res) => {
-    res.redirect(frontendURL + '/login');
-};
-
 const logout = (req, res) => {
     res.clearCookie('jwt', {
-    httpOnly: true,
-  });
-  res.json({ message: 'Logged out' });
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: isProduction ? 'None' : 'Lax'
+    });
+  res.json({ loggedIn: false });
 };
 
 module.exports = {
@@ -122,6 +105,5 @@ module.exports = {
     login_post,
     signup_get,
     login_get,
-    checkToken,
     logout
 };

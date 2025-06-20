@@ -150,50 +150,6 @@ const NewHabitDialog = ({ onClose }) => {
                             </p>
                         )}
                     </div>
-                    
-                    {/* Status Field */}
-                    <div className="space-y-2">
-                        <label htmlFor="status" className="text-sm font-medium text-text">
-                            Initial Status
-                        </label>
-                        <select 
-                            id="status"
-                            {...register('status')}
-                            className="w-full px-4 py-3 bg-background/50 border border-primary/20 rounded-lg text-text focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 hover:shadow-sm hover:shadow-glow/10 hover:bg-background/70 cursor-pointer"
-                        >
-                            <option value="pending">Pending</option>
-                            <option value="completed">Completed</option>
-                            <option value="missed">Missed</option>
-                        </select>
-                    </div>
-                    
-                    {/* First Todo Field */}
-                    <div className="space-y-2">
-                        <label htmlFor="firstTodo" className="text-sm font-medium text-text">
-                            First Action Step
-                        </label>
-                        <input 
-                            type="text" 
-                            id="firstTodo"
-                            {...register('firstTodo', {
-                                minLength: {
-                                    value: 3,
-                                    message: 'Action step must be at least 3 characters'
-                                }
-                            })}
-                            className={`w-full px-4 py-3 bg-background/50 border rounded-lg text-text placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all duration-300 hover:shadow-sm hover:shadow-glow/10 hover:bg-background/70 ${
-                                errors.firstTodo ? 'border-error/50 focus:ring-error/50 focus:border-error/50' : 'border-primary/20'
-                            }`}
-                            placeholder="e.g., Choose a book and set a timer"
-                        />
-                        {errors.firstTodo && (
-                            <p className="text-xs text-error mt-1 flex items-center gap-1">
-                                <div className="w-1 h-1 bg-error rounded-full"></div>
-                                {errors.firstTodo.message}
-                            </p>
-                        )}
-                        <p className="text-xs text-muted">Optional: Add a specific first step to get started</p>
-                    </div>
 
                     {/* Action Buttons */}
                     <div className="flex gap-3 pt-4">

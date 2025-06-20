@@ -14,9 +14,7 @@ const useHabit = () => {
         const fetchData = async () => {
             setHabitDataLoading(true);
             try {
-                const response = await axios.get(`${mainUrl}/profile/habit`, {
-                    params: { habitID: currentHabit }
-                });
+                const response = await axios.get(`${mainUrl}/habit/${currentHabit}`);
                 setHabitData(response.data.habit);
                 setHabitDataError(null);
             } catch (err){

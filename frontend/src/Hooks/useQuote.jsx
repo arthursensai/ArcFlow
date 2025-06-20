@@ -12,7 +12,7 @@ const useQuote = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(mainUrl + '/api/quote');
+                const response = await axios.get(`${mainUrl}/api/quote`);
                 setQuote(response.data.quote);
                 setAuthor(response.data.author);
                 setQuoteError(null);
@@ -22,7 +22,7 @@ const useQuote = () => {
         };
 
         fetchData();
-    }, []);
+    }, [1]);
 
     return { quote, author ,quoteError };
 };

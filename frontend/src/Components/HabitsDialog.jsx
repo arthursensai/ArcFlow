@@ -1,210 +1,255 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import { X, Target, TrendingUp, Calendar, ChevronRight, Plus, Clock, CheckCircle2, AlertCircle, XCircle } from 'lucide-react';
-import HabitStatusIcon from './HabitStatusIcon';
+import { useState } from 'react';
+import { X, Target, TrendingUp, Calendar, ChevronRight, Plus, Trash2, AlertTriangle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { setCurrentHabit } from '../Utils/CookieUtil';
+import axios from 'axios';
+
+const mainUrl = import.meta.env.VITE_API_URL;
+axios.defaults.withCredentials = true;
 
 const HabitsDialog = (props) => {
     const habits = props.habits || [];
+
+    const onDeleteHabit = (habitID) => {
+        try {
+            axios.delete(`${mainUrl}/habit/${habitID}`,);
+        } catch (err) {
+            console.log(err);
+        }
+    };
     
-    const getStatusCount = (status) => {
-        return habits.filter(habit => habit.status === status).length;
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [habitToDelete, setHabitToDelete] = useState(null);
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDeleteClick = (e, habit) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setHabitToDelete(habit);
+        setDeleteConfirmOpen(true);
     };
 
-    const getStatusIcon = (status) => {
-        const icons = {
-            completed: CheckCircle2,
-            pending: Clock,
-            missed: XCircle
-        };
-        return icons[status] || AlertCircle;
+    const handleConfirmDelete = async () => {
+        if (!habitToDelete) return;
+        setIsDeleting(true);
+        try {
+            await onDeleteHabit(habitToDelete._id);
+            setDeleteConfirmOpen(false);
+            setHabitToDelete(null);
+        } catch (error) {
+            console.error('Failed to delete habit:', error);
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
-    const getStatusConfig = (status) => {
-        const configs = {
-            completed: {
-                color: 'text-success',
-                bgColor: 'bg-success/10',
-                borderColor: 'border-success/30',
-                glowColor: 'shadow-success/20',
-                icon: CheckCircle2
-            },
-            pending: {
-                color: 'text-warning',
-                bgColor: 'bg-warning/10',
-                borderColor: 'border-warning/30',
-                glowColor: 'shadow-warning/20',
-                icon: Clock
-            },
-            missed: {
-                color: 'text-error',
-                bgColor: 'bg-error/10',
-                borderColor: 'border-error/30',
-                glowColor: 'shadow-error/20',
-                icon: XCircle
-            }
-        };
-        return configs[status] || {
-            color: 'text-muted',
-            bgColor: 'bg-muted/10',
-            borderColor: 'border-muted/30',
-            glowColor: 'shadow-muted/20',
-            icon: AlertCircle
-        };
+    const handleCancelDelete = () => {
+        setDeleteConfirmOpen(false);
+        setHabitToDelete(null);
     };
 
     return (
-        <Dialog.Portal>
-            <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-md z-40 animate-in fade-in-0" />
-            <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-surface to-surface/95 rounded-2xl shadow-2xl shadow-glow/30 border border-primary/20 p-0 w-[95vw] sm:w-full max-w-2xl z-50 focus:outline-none max-h-[90vh] overflow-hidden flex flex-col animate-in fade-in-0 zoom-in-95 duration-300">
-                
-                {/* Header with Gradient Background */}
-                <div className="bg-gradient-to-r from-primary/10 to-accent/10 border-b border-primary/20 p-6">
-                    <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-gradient-to-br from-primary via-accent to-glow rounded-xl flex items-center justify-center shadow-lg shadow-primary/30">
-                                <Target className="w-6 h-6 text-white" />
-                            </div>
-                            <div>
-                                <Dialog.Title className="text-2xl font-bold text-text mb-1">
-                                    Your Habits
-                                </Dialog.Title>
-                                <p className="text-sm text-muted/80">
-                                    {habits.length} habit{habits.length !== 1 ? 's' : ''} tracked today
-                                </p>
-                            </div>
-                        </div>
-                        <Dialog.Close asChild>
-                            <button 
-                                className="p-3 rounded-xl hover:bg-background/30 hover:shadow-lg hover:shadow-glow/20 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 group border border-primary/10"
-                                aria-label="Close dialog"
-                            >
-                                <X className="w-6 h-6 text-muted group-hover:text-text transition-colors duration-300" />
-                            </button>
-                        </Dialog.Close>
-                    </div>
-                </div>
-
-                {/* Enhanced Stats Overview */}
-                {habits.length > 0 && (
-                    <div className="p-6 pb-4">
-                        <div className="grid grid-cols-3 gap-4">
-                            {[
-                                { status: 'completed', label: 'Completed', description: 'Well done!' },
-                                { status: 'pending', label: 'Pending', description: 'Keep going!' },
-                                { status: 'missed', label: 'Missed', description: 'Try again' }
-                            ].map(({ status, label, description }) => {
-                                const config = getStatusConfig(status);
-                                const Icon = config.icon;
-                                const count = getStatusCount(status);
-                                
-                                return (
-                                    <div key={status} className={`${config.bgColor} ${config.borderColor} rounded-xl p-4 text-center border-2 hover:shadow-lg ${config.glowColor} transition-all duration-300 hover:scale-105`}>
-                                        <div className="flex items-center justify-center mb-2">
-                                            <Icon className={`w-5 h-5 ${config.color}`} />
-                                        </div>
-                                        <div className={`text-2xl font-bold ${config.color} mb-1`}>
-                                            {count}
-                                        </div>
-                                        <div className="text-sm font-medium text-text mb-1">{label}</div>
-                                        <div className="text-xs text-muted/70">{description}</div>
+        <>
+            <Dialog.Portal>
+                <Dialog.Overlay className="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 animate-in fade-in-0 duration-300" />
+                <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-surface via-background to-surface rounded-3xl shadow-2xl shadow-black/50 border border-surface/50 p-0 w-[95vw] sm:w-full max-w-2xl z-50 focus:outline-none max-h-[85vh] overflow-hidden flex flex-col animate-in fade-in-0 zoom-in-95 duration-300">
+                    
+                    {/* Header */}
+                    <div className="relative bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 border-b border-surface/50 p-8">
+                        <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5 backdrop-blur-sm"></div>
+                        <div className="relative flex items-center justify-between">
+                            <div className="flex items-center gap-5">
+                                <div className="relative">
+                                    <div className="w-16 h-16 bg-gradient-to-br from-primary via-accent to-glow rounded-2xl flex items-center justify-center shadow-lg shadow-primary/30 border border-white/10">
+                                        <Target className="w-8 h-8 text-white" />
                                     </div>
-                                );
-                            })}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-primary via-accent to-glow rounded-2xl blur-xl opacity-30 -z-10"></div>
+                                </div>
+                                <div>
+                                    <Dialog.Title className="text-3xl font-bold bg-gradient-to-r from-text to-muted bg-clip-text text-transparent mb-2">
+                                        Your Habits
+                                    </Dialog.Title>
+                                    <p className="text-muted font-medium">
+                                        {habits.length} habit{habits.length !== 1 ? 's' : ''} in your journey
+                                    </p>
+                                </div>
+                            </div>
+                            <Dialog.Close asChild>
+                                <button 
+                                    className="p-3 rounded-xl bg-surface/50 hover:bg-surface/70 border border-surface/50 hover:border-muted/50 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 group backdrop-blur-sm"
+                                    aria-label="Close dialog"
+                                >
+                                    <X className="w-6 h-6 text-muted group-hover:text-text transition-colors duration-300" />
+                                </button>
+                            </Dialog.Close>
                         </div>
                     </div>
-                )}
 
-                {/* Content Area */}
-                <div className="flex-1 overflow-hidden flex flex-col px-6">
-                    <Dialog.Description className="text-sm text-muted/80 mb-4 font-medium">
-                        {habits.length > 0 ? 'Select a habit to view details and update your progress:' : 'Ready to start your journey? Create your first habit below!'}
-                    </Dialog.Description>
-
-                    {/* Habits List */}
-                    <div className="flex-1 overflow-y-auto space-y-3 pb-6 scrollbar-thin scrollbar-thumb-primary/30 scrollbar-track-transparent">
+                    {/* Content Area */}
+                    <div className="flex-1 overflow-hidden flex flex-col p-8">
                         {habits.length === 0 ? (
-                            <div className="text-center py-16">
-                                <div className="w-24 h-24 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl flex items-center justify-center mx-auto mb-6 border border-primary/20">
-                                    <Calendar className="w-12 h-12 text-primary" />
+                            <div className="flex-1 flex items-center justify-center">
+                                <div className="text-center max-w-md">
+                                    <div className="relative mb-8">
+                                        <div className="w-32 h-32 bg-gradient-to-br from-primary/20 via-accent/20 to-glow/20 rounded-3xl flex items-center justify-center mx-auto border border-surface/30">
+                                            <Calendar className="w-16 h-16 text-muted" />
+                                        </div>
+                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 rounded-3xl blur-2xl"></div>
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-text mb-4">Ready to build greatness?</h3>
+                                    <p className="text-muted mb-10 leading-relaxed text-lg">
+                                        Every expert was once a beginner. Start your transformation journey with your first habit.
+                                    </p>
+                                    
+                                    <Link 
+                                        to="/create-habit"
+                                        className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary via-accent to-glow text-white text-lg font-semibold rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/40 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background relative overflow-hidden group"
+                                    >
+                                        <div className="absolute inset-0 bg-gradient-to-r from-accent via-primary to-glow opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                        <Plus className="w-6 h-6 relative z-10" />
+                                        <span className="relative z-10">Create Your First Habit</span>
+                                    </Link>
                                 </div>
-                                <h3 className="text-xl font-semibold text-text mb-2">No habits yet</h3>
-                                <p className="text-muted/70 mb-8 max-w-sm mx-auto leading-relaxed">
-                                    Transform your daily routine by creating meaningful habits that stick. Start small, think big.
-                                </p>
-                                
-                                <Link 
-                                    to="/create-habit"
-                                    className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-primary to-accent text-white text-sm font-semibold rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-primary/40 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-surface"
-                                >
-                                    <Plus className="w-5 h-5" />
-                                    Create Your First Habit
-                                </Link>
                             </div>
                         ) : (
-                            habits.map((habit, index) => {
-                                const config = getStatusConfig(habit.status);
-                                
-                                return (
-                                    <Link 
-                                        key={habit._id}
-                                        to="/habit"
-                                        onClick={() => setCurrentHabit(habit._id)}
-                                        className={`group block p-5 bg-gradient-to-r from-background/30 to-background/10 hover:from-background/50 hover:to-background/30 border ${config.borderColor} hover:border-primary/40 rounded-xl transition-all duration-300 hover:shadow-lg ${config.glowColor} hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary/50 animate-in slide-in-from-bottom-4`}
-                                        style={{ animationDelay: `${Math.min(index * 100, 400)}ms` }}
-                                        role="button"
-                                        tabIndex={0}
-                                    >
-                                        <div className="flex items-start gap-4">
-                                            <div className={`w-12 h-12 ${config.bgColor} rounded-xl flex items-center justify-center border ${config.borderColor} group-hover:scale-110 transition-transform duration-300`}>
-                                                <HabitStatusIcon status={habit.status} />
-                                            </div>
-                                            
-                                            <div className="flex-1 min-w-0">
-                                                <div className="flex items-center justify-between mb-2">
-                                                    <h3 className="font-bold text-lg text-text group-hover:text-primary transition-colors duration-300 truncate">
-                                                        {habit.title}
-                                                    </h3>
-                                                    <ChevronRight className="w-5 h-5 text-muted group-hover:text-primary group-hover:translate-x-1 transition-all duration-300 flex-shrink-0" />
-                                                </div>
-                                                
-                                                {habit.description && (
-                                                    <p className="text-sm text-muted/80 group-hover:text-muted transition-colors duration-300 line-clamp-2 mb-3 leading-relaxed">
-                                                        {habit.description}
-                                                    </p>
-                                                )}
-                                                
-                                                <div className="flex items-center justify-between">
-                                                    <div className="flex items-center gap-2">
-                                                        <TrendingUp className="w-4 h-4 text-muted" />
-                                                        <span className="text-sm text-muted font-medium">Track Progress</span>
+                            <>
+                                <div className="mb-6">
+                                    <p className="text-text text-lg font-medium">
+                                        Select a habit to track your progress
+                                    </p>
+                                </div>
+
+                                {/* Habits Grid */}
+                                <div className="flex-1 overflow-y-auto space-y-4 pr-2 scrollbar-thin scrollbar-thumb-surface scrollbar-track-transparent">
+                                    {habits.map((habit, index) => {
+                                        return (
+                                            <div 
+                                                key={habit._id}
+                                                className={`group relative p-6 bg-gradient-to-r from-surface/60 to-surface/40 hover:from-surface/80 hover:to-surface/60 border border-surface/50 hover:border-primary/40 rounded-2xl transition-all duration-500 hover:shadow-lg hover:shadow-primary/20 hover:scale-[1.02] animate-in slide-in-from-bottom-4 backdrop-blur-sm`}
+                                                style={{ animationDelay: `${Math.min(index * 100, 400)}ms` }}
+                                            >
+                                                {/* Delete Button */}
+                                                <button
+                                                    onClick={(e) => handleDeleteClick(e, habit)}
+                                                    className="absolute top-4 right-4 p-2.5 rounded-xl opacity-0 group-hover:opacity-100 bg-error/10 hover:bg-error/20 border border-error/30 hover:border-error/50 transition-all duration-300 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-error/50 z-10 backdrop-blur-sm"
+                                                    aria-label={`Delete ${habit.title}`}
+                                                    title="Delete habit"
+                                                >
+                                                    <Trash2 className="w-5 h-5 text-error" />
+                                                </button>
+
+                                                {/* Habit Content */}
+                                                <Link 
+                                                    to="/habit"
+                                                    onClick={() => setCurrentHabit(habit._id)}
+                                                    className="block focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 focus:ring-offset-background rounded-xl"
+                                                    role="button"
+                                                    tabIndex={0}
+                                                >
+                                                    <div className="flex items-start gap-5 pr-16">
+                                                        <div className={`relative w-16 h-16 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl flex items-center justify-center border border-primary/30 group-hover:scale-110 transition-all duration-300 backdrop-blur-sm`}>
+                                                            <Target className="w-8 h-8 text-primary" />
+                                                            <div className={`absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl blur-xl opacity-30 -z-10 group-hover:opacity-50 transition-opacity duration-300`}></div>
+                                                        </div>
+                                                        
+                                                        <div className="flex-1 min-w-0 pt-1">
+                                                            <div className="flex items-start justify-between mb-3">
+                                                                <h3 className="font-bold text-xl text-text group-hover:text-primary transition-colors duration-300 truncate pr-4">
+                                                                    {habit.title}
+                                                                </h3>
+                                                                <ChevronRight className="w-6 h-6 text-muted group-hover:text-primary group-hover:translate-x-1 transition-all duration-300 flex-shrink-0 mt-1" />
+                                                            </div>
+                                                            
+                                                            {habit.description && (
+                                                                <p className="text-muted group-hover:text-text transition-colors duration-300 line-clamp-2 mb-4 leading-relaxed">
+                                                                    {habit.description}
+                                                                </p>
+                                                            )}
+                                                            
+                                                            <div className="flex items-center justify-between">
+                                                                <div className="flex items-center gap-3">
+                                                                    <TrendingUp className="w-5 h-5 text-muted" />
+                                                                    <span className="text-muted font-medium">Track Progress</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                    <div className={`px-3 py-1.5 rounded-full text-xs font-semibold border-2 ${config.bgColor} ${config.color} ${config.borderColor}`}>
-                                                        {habit.status.charAt(0).toUpperCase() + habit.status.slice(1)}
-                                                    </div>
-                                                </div>
+                                                </Link>
                                             </div>
-                                        </div>
-                                    </Link>
-                                );
-                            })
+                                        );
+                                    })}
+                                </div>
+                            </>
                         )}
                     </div>
-                </div>
+                </Dialog.Content>
+            </Dialog.Portal>
 
-                {/* Enhanced Footer */}
-                {habits.length > 0 && (
-                    <div className="bg-gradient-to-r from-primary/5 to-accent/5 border-t border-primary/20 p-6">
-                        <div className="flex items-center justify-center gap-3 text-sm text-muted/80">
-                            <div className="w-2 h-2 bg-gradient-to-r from-primary to-accent rounded-full animate-pulse"></div>
-                            <span className="font-medium">Click any habit to view details and update progress</span>
-                            <div className="w-2 h-2 bg-gradient-to-r from-accent to-primary rounded-full animate-pulse"></div>
+            {/* Delete Confirmation Dialog */}
+            <Dialog.Root open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+                <Dialog.Portal>
+                    <Dialog.Overlay className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 animate-in fade-in-0" />
+                    <Dialog.Content className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-gradient-to-br from-surface to-background rounded-2xl shadow-2xl shadow-error/20 border border-error/30 p-0 w-[90vw] max-w-md z-50 focus:outline-none animate-in fade-in-0 zoom-in-95 duration-300">
+                        
+                        {/* Header */}
+                        <div className="bg-gradient-to-r from-error/10 to-error/5 border-b border-error/20 p-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-12 h-12 bg-gradient-to-br from-error/20 to-error/10 rounded-xl flex items-center justify-center border border-error/30">
+                                    <AlertTriangle className="w-6 h-6 text-error" />
+                                </div>
+                                <div>
+                                    <Dialog.Title className="text-xl font-bold text-text mb-1">
+                                        Delete Habit
+                                    </Dialog.Title>
+                                    <p className="text-sm text-muted">
+                                        This action cannot be undone
+                                    </p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                )}
-                
-            </Dialog.Content>
-        </Dialog.Portal>
+
+                        {/* Content */}
+                        <div className="p-6">
+                            <p className="text-text mb-2">
+                                Are you sure you want to delete <strong className="text-primary">"{habitToDelete?.title}"</strong>?
+                            </p>
+                            <p className="text-sm text-muted mb-6">
+                                All progress and data associated with this habit will be permanently removed.
+                            </p>
+
+                            {/* Action Buttons */}
+                            <div className="flex gap-3 justify-end">
+                                <button
+                                    onClick={handleCancelDelete}
+                                    disabled={isDeleting}
+                                    className="px-6 py-3 text-sm font-medium bg-surface/50 hover:bg-surface/70 border border-surface/50 hover:border-muted/50 rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-primary/50 disabled:opacity-50 disabled:cursor-not-allowed text-text"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleConfirmDelete}
+                                    disabled={isDeleting}
+                                    className="px-6 py-3 text-sm font-medium bg-gradient-to-r from-error to-error/80 hover:from-error/90 hover:to-error text-white rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-error/30 focus:outline-none focus:ring-2 focus:ring-error/50 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                                >
+                                    {isDeleting ? (
+                                        <>
+                                            <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            Deleting...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Trash2 className="w-4 h-4" />
+                                            Delete Habit
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+                        </div>
+                    </Dialog.Content>
+                </Dialog.Portal>
+            </Dialog.Root>
+        </>
     );
 };
 

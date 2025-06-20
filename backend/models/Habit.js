@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Todo = require('./Todo');
 
 const HabitSchema = new mongoose.Schema({
     userID: {
@@ -12,94 +13,78 @@ const HabitSchema = new mongoose.Schema({
     description: {
         type: String
     },
-    status: {
-        type: String,
-        required: true,
-        default: 'pending'
-    },
     streak: {
         type: Number,
         default: 0
     },
-    startDate: {
-        type: String,
-        required: true
-    },
     totalMinutes: {
         type: Number,
         default: 0
-    },
-    todos: [{
-        title: {
+    },          
+    history: [{
+        date: {
             type: String,
-            required: [true, 'no valid todo title']
+            required: true
         },
-        completed: {
-            type: Boolean,
-            default: false
+        minutesSpent: {
+            type: Number,
+            default: 0
+        },
+        progress: {
+            type: Number,
+            default: 0
         }
-    }],
-    history: {
-        type: Map,
-        of: [String],
-        default: () => new Map()
-    }
+    }]
 });
 
-//search for user habits
-HabitSchema.statics.getAllHabits = async function(userID) {
-    const habits = await this.find({ userID }).select('-userID');
-    if(habits){
-        return habits;
-    }
-    throw Error("No habits exist add one");
-};
-
-//search for one habit
+// Search for one habit
 HabitSchema.statics.getHabitByID = async function(habitID){
+    if(!habitID) throw new Error('no valid habitID');
     const habit = await this.findOne({ _id: habitID }).select('-userID');
-    if(habit){
-        return habit;
+    if(!habit) throw Error('No valid habit exist with this ID');
+    return habit;
+};
+
+// Search for all habits
+HabitSchema.statics.getAllHabits = async function(userID) {
+    if(!userID) throw new Error('no valid user');
+    const habits = await this.find({ userID }).select('-userID');
+    if(!habits) throw Error("No valid habits");
+    if(habits) return habits;
+};
+
+//delete a habit
+HabitSchema.statics.deleteHabit = async function(habitID, userID) {
+  if (!habitID) throw new Error('No valid habit ID');
+
+  try {
+    const habitResponse = await this.findOneAndDelete({ _id: habitID, userID: userID });
+
+    if (!habitResponse) {
+      throw new Error('Habit not found or already deleted');
     }
-    throw Error("No valid habit exist with this ID");
+
+    // Delete associated todos
+    const todosResponse = await Todo.deleteMany({ habitID });
+
+    return `Habit deleted. ${todosResponse.deletedCount} todos also removed.`;
+  } catch (err) {
+    throw new Error(err.message || 'Failed to delete the habit');
+  }
 };
 
-//add a new to do to the todos arrat of the habit
-HabitSchema.statics.addNewTodo = async function(habitID, newTodoTitle){
-    const todo = await this.findByIdAndUpdate(habitID,
-    {
-        $push: {
-        todos: {
-            title: newTodoTitle,
-            completed: false
-        }
-        }
-    },
-    { new: true }
-    );
-}
-
-//delete a todo
-HabitSchema.statics.deleteTodo = async function(habitId, todoId) {
-  return this.updateOne(
-    { _id: habitId },
-    { $pull: { todos: { _id: todoId } } }
-  );
-};
-
-//update todo completion
-HabitSchema.statics.updateTodoCompletion = async function(habitId, todoId, completed) {
-  return this.updateOne(
-    { _id: habitId, "todos._id": todoId },
-    { $set: { "todos.$.completed": completed } }
-  );
-};
-
-HabitSchema.statics.updateTotalMinutes = async function(habitId, minutesToAdd) {
-  return this.updateOne(
-    { _id: habitId },
-    { $inc: { totalMinutes: minutesToAdd } }
-  );
+// Update total minutes
+HabitSchema.statics.updateTotalMinutes = async function(habitID, minutesToAdd) {
+    if(!habitID) throw new Error('no valid habit');
+    if(typeof minutesToAdd !== 'number') throw new Error('no valid minutes to add');
+    try {
+        return this.updateOne(
+            { _id: habitID },
+            { $inc: { totalMinutes: minutesToAdd } }
+        );
+    } catch (err){
+        throw new Error(err.message || 'failed to add minutest to the total');
+    }
 };
 
 const Habit = mongoose.model('habit', HabitSchema);

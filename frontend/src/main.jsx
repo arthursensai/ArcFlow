@@ -6,6 +6,7 @@ import LandingPage from "./pages/LandingPage";
 import Dashboard from "./pages/Dashboard.jsx";
 import Login from "./pages/Login.jsx";
 import Habit from "./pages/Habit.jsx";
+import NotFound from "./pages/NotFound.jsx"
 
 import './index.css';
 
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: 'habit',
     element: <Habit />
+  },
+  {
+    path: '*',
+    element: <NotFound />
   }
 ]);
 

@@ -3,9 +3,12 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv').config();
 const authRoute = require('./routes/auth');
 const profileRoute = require('./routes/profile');
+const habitRoute = require('./routes/habit');
+const quoteRoute = require('./routes/quote');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const axios = require('axios');
+const requireAuth = require('./middlewares/requireAuth');
 
 //declare app
 const app = express();
@@ -30,22 +33,15 @@ const frontendURL = process.env.FRONTEND_URL;
 //Routes 
 app.use('/auth', authRoute);
 app.use('/profile', profileRoute);
+app.use('/habit', habitRoute);
+app.use('/quote', quoteRoute);
 
-//reset todos
-require('./cronJobes/resetTodos');
+//cronjobes
+//require('./cronJobes/cronJob');
 
 app.get('/', (req, res) => {
-    res.redirect(frontendURL);
+  res.redirect(frontendURL);
 })
-
-//simple quotes route
-app.get("/api/quote", async (req, res) => {
-  axios.get('https://zenquotes.io/api/random').then((response) => {
-    return res.status(200).json({ quote: response.data[0].q, author: response.data[0].a });
-  }).catch((err) => {
-    return res.status(400).json({ error: err });
-  })
-});
 
 mongoose.connect(mongodbString).then(() => {
   console.log('Connected to the Database !');

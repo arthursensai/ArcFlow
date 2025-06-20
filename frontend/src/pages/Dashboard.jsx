@@ -1,21 +1,58 @@
 import { useState, useEffect } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import useCheck from '../Hooks/useCheck';
+import useCurrentUser from '../Hooks/useCurrentUser';
 import useHabits from '../Hooks/useHabits';
-import useFetch from '../Hooks/useFetch';
 import Clock from '../Components/Clock';
 import HabitsDialog from '../Components/HabitsDialog';
 import Footer from '../Components/Footer';
+import { checkUserAuth, getCurrentUserData } from '../Api/user';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-  const { check, checking } = useCheck();
-  const { habits, habitsError, habitsLoading } = useHabits();
+  const navigate = useNavigate();
   
-  if (checking && habitsLoading) return <p>Checking login status...</p>;
+  const [loginStatus, setLoginStatus] = useState(false);
+  const [username, setUsername] = useState('');
+  
+  //checks the user authentication
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const response = await checkUserAuth();
+          setLoginStatus(response.data.loggedIn);
+        } catch (err) {
+          console.log(err)
+        }
+      }
+      checkUser();
+    }, []);
+  
+  if(!loginStatus){ navigate('/dashboard') };
+  
+  //needs changing
+  const { user, loading } = useCurrentUser();
+  
+  useEffect(() => {
+          const getUserData = async () => {
+              try {
+                  const response = await checkUserAuth();
+                  setLoginStatus(response.data.loggedIn);
+              } catch (err) {
+                  console.log(err)
+              }
+          }
+          checkUser();
+      }, []);
 
-  if (!check?.loggedIn) {
-    return null;
-  }
+  const { habits, habitsError, habitsLoading } = useHabits();
+
+  useEffect(() => {
+    if(user) { setUsername(user.username) };
+  }, [user])
+
+  if (loading, habitsLoading) return <p>loading data...</p>;
+  if(habitsError) return <p>{habitsError.message}</p>
+  
 
   return (
       <main className="flex flex-col h-screen relative">
@@ -38,7 +75,7 @@ const Dashboard = () => {
               Welcome Back,
             </h2>
             <h2 className="text-6xl font-bold text-cyan-400 drop-shadow-[0_4px_12px_rgba(34,211,238,0.4)] leading-tight">
-              {check.userData?.username || 'User'}
+              {username || 'User'}
             </h2>
           </div>
 
@@ -55,7 +92,7 @@ const Dashboard = () => {
                 Start Your Flow
               </button>
               </Dialog.Trigger>
-              <HabitsDialog habits={habits} />
+              <HabitsDialog habits={habits}/>
             </Dialog.Root>
           </div>
         </section>

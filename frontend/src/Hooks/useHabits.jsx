@@ -12,7 +12,7 @@ const useHabits = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get(mainUrl + '/profile/habits');
+                const response = await axios.get(`${mainUrl}/habit`);
                 setHabits(response.data.habits);
                 setHabitsError(null);
             } catch (err) {

@@ -1,18 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { useForm } from 'react-hook-form';
-import useLogin from '../Hooks/useLogin';
-import useSignup from '../Hooks/useSignup';
 import { useNavigate } from 'react-router-dom';
+import { checkUserAuth, signup, login } from '../Api/user';
 
 const Login = () => {
+    const [loginStatus, setLoginStatus] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
     const [isLogin, setIsLogin] = useState(true);
     const [showPassword, setShowPassword] = useState(false);
-    const { signup, errors: signupErrors, loading: signupLoading } = useSignup();
-    const { login, errors: loginErrors, loading: loginLoading } = useLogin();
     const [authErrors, setAuthErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const checkUser = async () => {
+            try {
+                const response = await checkUserAuth();
+                setLoginStatus(response.data.loggedIn);
+            } catch (err) {
+                console.log(err)
+            }
+        }
+        checkUser();
+    }, []);
+
+    if(!loginStatus){ navigate('/login') };
 
     const { register, handleSubmit, setError, formState: {errors}, watch, reset } = useForm({ 
         mode: "onChange" 
@@ -22,12 +37,10 @@ const Login = () => {
         setAuthErrors({});
         setSuccessMessage('');
         
-        // Clear any previous form errors
         Object.keys(errors).forEach(key => {
             setError(key, { message: '' });
         });
         
-        // Remove confirmPassword from data when logging in
         const authData = isLogin ? 
             { email: data.email, password: data.password } : 
             { username: data.username, email: data.email, password: data.password };
@@ -40,7 +53,6 @@ const Login = () => {
             } else {
                 const errors = loginResponse.errors || {};
                 
-                // Set field-specific errors
                 if (errors.email) {
                     setError('email', { message: errors.email });
                 }
@@ -48,7 +60,6 @@ const Login = () => {
                     setError('password', { message: errors.password });
                 }
                 
-                // Set general errors for display
                 if (errors.general) {
                     setAuthErrors({ general: errors.general });
                 } else if (!errors.email && !errors.password) {
@@ -64,7 +75,6 @@ const Login = () => {
             } else {
                 const errors = result.errors || {};
                 
-                // Set field-specific errors
                 if (errors.email) {
                     setError('email', { message: errors.email });
                 }
@@ -75,7 +85,6 @@ const Login = () => {
                     setError('password', { message: errors.password });
                 }
                 
-                // Set general errors for display
                 if (errors.general) {
                     setAuthErrors({ general: errors.general });
                 } else if (!errors.email && !errors.username && !errors.password) {
@@ -89,10 +98,8 @@ const Login = () => {
         setIsLogin(loginMode);
         setAuthErrors({});
         setSuccessMessage('');
-        reset(); // Clear form when switching modes
+        reset();
     };
-
-    const isLoading = signupLoading || loginLoading;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white flex items-center justify-center px-4">
