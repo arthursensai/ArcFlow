@@ -159,7 +159,7 @@ const ComingSoon = () => {
           <div className="flex items-center gap-6">
             {[
               { Icon: Instagram, href: "https://www.instagram.com/sensai_arthur/", label: "Instagram" },
-              { Icon: Mail, href: "mailto:mohamedaytsidibah@gmail.com", label: "Email" },
+              { Icon: Mail, href: "mailto:mohamedaytsidibah@gmail.com?subject=From ArcFlow&body=Hello Arthur,", label: "Email" },
               { Icon: Github, href: "https://github.com/arthursensai", label: "GitHub" },
             // eslint-disable-next-line no-unused-vars
             ].map(({ Icon, href, label }) => (
