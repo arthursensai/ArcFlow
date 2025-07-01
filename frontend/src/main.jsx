@@ -9,7 +9,7 @@ import Habit from "./pages/Habit.jsx";
 import NotFound from "./pages/NotFound.jsx"
 
 import './index.css';
-import ComingSoon from "./Pages/ComingSoon.jsx";
+import ComingSoon from "./pages/ComingSoon.jsx";
 
 const isProduction = import.meta.env.VITE_IS_PRODUCTION;
 
