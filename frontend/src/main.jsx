@@ -9,11 +9,14 @@ import Habit from "./pages/Habit.jsx";
 import NotFound from "./pages/NotFound.jsx"
 
 import './index.css';
+import ComingSoon from "./Pages/ComingSoon.jsx";
+
+const isProduction = import.meta.env.VITE_IS_PRODUCTION;
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <LandingPage />
+    element: <ComingSoon />
   },
   {
     path: '/login',
@@ -37,6 +40,6 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    {isProduction ? <RouterProvider router={router} /> : <ComingSoon />}
   </React.StrictMode>
 );

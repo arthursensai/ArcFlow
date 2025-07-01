@@ -20,15 +20,6 @@ const TodoShema = new mongoose.Schema({
     }
 });
 
-//function that checks habit existing based on a habitID
-async function checkHabit(habitID) {
-    try {
-        return await Habit.findById(habitID);
-    } catch (err) {
-        return null;
-    }
-};
-
 // Search for one todo
 TodoShema.statics.getTodoByID = async function(userID, habitID, todoID){
     if(!userID) throw new Error('no valid user');
@@ -55,9 +46,9 @@ TodoShema.statics.createTodo = async function(userID, habitID, title){
     if(!habitID) throw new Error('no valid habitID');
     if(!title) throw new Error('no valid todo title');
 
-    const habit = await checkHabit(habitID);
-
-    if(!habit) throw Error('No valid habit exist with this ID');
+    const habit = await Habit.getHabitByID(userID, habitID);
+    
+    if(!habit) throw new Error('no valid habit exists with this ID');
 
     try {
         const todo = await this.create({

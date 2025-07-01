@@ -1,8 +1,8 @@
-import LandingPage from "./pages/LandingPage";
+import ComingSoon from "./Pages/ComingSoon";
 
 const App = () => {
     return (
-        <LandingPage />
+        <ComingSoon />
     )
 };
 

@@ -9,4 +9,16 @@ const setAuthCookie = (res, token) => {
   });
 };
 
-module.exports = setAuthCookie;
+const setHabitCookie = (res, habitID) => {
+  res.cookie('habitID', habitID, {
+    httpOnly: true,
+    maxAge: 3 * 24 * 60 * 60 * 1000,
+    secure: isProduction,
+    sameSite: isProduction ? 'None' : 'Lax'
+  });
+}
+
+module.exports = {
+  setAuthCookie,
+  setHabitCookie
+};

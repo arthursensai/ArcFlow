@@ -1,9 +1,50 @@
 @import url('https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
-@config "../tailwind.config.js";
 
 body {
     font-family: 'Urbanist', sans-serif;
-    background: linear-gradient(135deg, #0F0F1A, #1C1C2C);
     color: white;
+}
+
+@theme {
+    --color-primary: #1fb6ff;
+    --color-main: #0e0e12;
+
+    --text-shadow-logo: 0 0px 40px rgb(0, 0, 0 / 0.25);
+    --shadow-social: 0 0 8px #1FB6FF, 0 0 12px #00C2FF;
+    
+    @keyframes pulse {
+        25% {
+            opacity:  0.1;
+        }
+        50% {
+            opacity: 0.2;
+        }
+    }
+}
+
+@layer components {
+    .page {
+        @apply w-full h-screen bg-main;
+    }
+    .header {
+        @apply flex items-center justify-between w-full h-2/12 border-b-2 border-white p-4;
+    }
+    .main {
+        @apply w-full min-h-6/12;
+    }
+    .card {
+        @apply bg-primary w-20 h-20 rounded-4xl;
+    }
+    .footer {
+        @apply absolute bottom-0 text-gray-300 flex justify-evenly w-full;
+    }
+}
+
+@utility logo-text {
+    @apply text-9xl font-bold;
+}
+
+@utility flex-center {
+    @apply flex flex-col items-center justify-center;
 }

@@ -7,11 +7,11 @@ const requireAuth = require('../middlewares/requireAuth');
 router.get("/", requireAuth, habits_get);
 //get a specific habit
 router.get("/:id", requireAuth, habit_get);
+//create a new habit
+router.post("/new", requireAuth ,habit_post);
 //delete a habit
 router.delete("/:id", requireAuth, habit_delete);
-//create a new habit
-router.post("/createHabit", requireAuth ,habit_post);
 //update totalMinutes
-router.put("/updateTotalMinutes", requireAuth , updateTotalMinutes);
+router.put("/:id", requireAuth , updateTotalMinutes);
 
 module.exports = router;

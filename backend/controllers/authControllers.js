@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const { signupSchema, loginSchema } = require('../Validators/userValidation');
 const createToken = require('../utils/jwt');
-const setAuthCookie = require('../utils/cookie');
+const { setAuthCookie } = require('../utils/cookie');
 
 //declaring .env variables
 const frontendURL = process.env.FRONTEND_URL;

@@ -8,10 +8,15 @@ const HabitSchema = new mongoose.Schema({
     },
     title: {
         type: String,
-        required: [true, 'no valid habit title']
+        required: [true, 'no valid habit title'],
+        minlength: [3, 'minimum length is 3 characters'],
+        maxlength: [15, 'maximum length is 15 characters']
     },
     description: {
-        type: String
+        type: String,
+        required: true,
+        minlength: [10, 'minimum length is 10 characters'],
+        maxlength: [50, 'maximum length is 50 characters']
     },
     streak: {
         type: Number,
@@ -38,23 +43,43 @@ const HabitSchema = new mongoose.Schema({
 });
 
 // Search for one habit
-HabitSchema.statics.getHabitByID = async function(habitID){
+HabitSchema.statics.getHabitByID = async function(userID, habitID){
     if(!habitID) throw new Error('no valid habitID');
-    const habit = await this.findOne({ _id: habitID }).select('-userID');
+
+    const habit = await this.findOne({ _id: habitID, userID }).select('-userID');
     if(!habit) throw Error('No valid habit exist with this ID');
+
     return habit;
 };
 
 // Search for all habits
 HabitSchema.statics.getAllHabits = async function(userID) {
     if(!userID) throw new Error('no valid user');
+
     const habits = await this.find({ userID }).select('-userID');
+
     if(!habits) throw Error("No valid habits");
-    if(habits) return habits;
+
+    return habits;
 };
 
+// Create a new habit
+HabitSchema.statics.createHabit = async function (userID, title, description) {
+    if (!userID) throw new Error('no valid user');
+    if(!title) throw new Error('no valid title');
+    if(!description) throw new Error('no valid description');
+
+    try {
+        const newHabit = await this.create({ userID, title, description });
+        return newHabit;
+    } catch (err) {
+        throw new Error('Failed to create habit');
+    }
+};
+
+
 //delete a habit
-HabitSchema.statics.deleteHabit = async function(habitID, userID) {
+HabitSchema.statics.deleteHabit = async function(userID, habitID) {
   if (!habitID) throw new Error('No valid habit ID');
 
   try {
@@ -74,12 +99,12 @@ HabitSchema.statics.deleteHabit = async function(habitID, userID) {
 };
 
 // Update total minutes
-HabitSchema.statics.updateTotalMinutes = async function(habitID, minutesToAdd) {
+HabitSchema.statics.updateTotalMinutes = async function(userID, habitID, minutesToAdd) {
     if(!habitID) throw new Error('no valid habit');
-    if(typeof minutesToAdd !== 'number') throw new Error('no valid minutes to add');
+    if(typeof minutesToAdd !== 'number') throw new Error('minutes to add must be a valid number');
     try {
         return this.updateOne(
-            { _id: habitID },
+            { userID, _id: habitID },
             { $inc: { totalMinutes: minutesToAdd } }
         );
     } catch (err){

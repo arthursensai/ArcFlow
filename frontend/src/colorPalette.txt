@@ -10,3 +10,23 @@
 | **Warning Orange**      | ![#f97316](https://via.placeholder.com/20/f97316?text=+) | `#F97316` | Alerts                |
 | **Error Red**           | ![#ef4444](https://via.placeholder.com/20/ef4444?text=+) | `#EF4444` | Failed task, errors   |
 | **Highlight Glow**      | ![#60efff](https://via.placeholder.com/20/60efff?text=+) | `#60EFFF` | For neon/glow touches |
+| Element/Use                    | HEX / Style                           | Purpose / Notes                                    |
+| ------------------------------ | ------------------------------------- | -------------------------------------------------- |
+| **Primary Button (bg)**        | `#1FB6FF`                             | زر رئيسي واضح، يستخدم للمهام الأساسية (حفظ، إرسال) |
+| **Primary Button (hover)**     | `#00C2FF`                             | تأثير انتقال ناعم – مع glow داخلي خفيف             |
+| **Secondary Button (bg)**      | `#1C1C26`                             | زر خلفي أو مكرر – يستخدم داخل البطاقات             |
+| **Secondary Button (hover)**   | `#2A2A35`                             | لون داكن خفيف + border بلون `#1FB6FF`              |
+| **Success Button / Badge**     | `#10B981`                             | لنتائج إيجابية أو إشارات تقدم                      |
+| **Warning Button / Badge**     | `#F97316`                             | للتنبيهات أو الرسائل غير الخطيرة                   |
+| **Error Button / Badge**       | `#EF4444`                             | للتنبيهات الحرجة أو الأخطاء                        |
+| **Input Background**           | `#1C1C26`                             | حقول إدخال داخل البطاقات                           |
+| **Input Border**               | `#2A2A35` or `#1FB6FF` (focus)        | حدود خفيفة، تتوهج عند التركيز                      |
+| **Input Placeholder Text**     | `#9CA3AF`                             | نص خافت داخل الحقول                                |
+| **Text Link Default**          | `#1FB6FF`                             | رابط تفاعلي ضمن النصوص                             |
+| **Text Link Hover**            | `#00C2FF`                             | عند المرور – يظهر توهج أو خط تحت النص              |
+| **Card Background**            | `#1C1C26`                             | الخلفية العامة للبطاقات                            |
+| **Card Border**                | `#292938`                             | فاصل رقيق بين العناصر                              |
+| **Card Shadow (optional)**     | `0 4px 20px rgba(31, 182, 255, 0.05)` | تأثير خفيف للإبراز                                 |
+| **Toast Background (Success)** | `#1C1C26` + border `#10B981`          | إشعار ناجح بتصميم مظلم                             |
+| **Toast Background (Error)**   | `#1C1C26` + border `#EF4444`          | إشعار خطأ بتصميم مظلم                              |
+| **Skeleton / Loading Glow**    | `#2A2A35` with `#60EFFF` overlay      | لمسة متوهجة للمكونات أثناء التحميل                 |

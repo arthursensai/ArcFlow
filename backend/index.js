@@ -4,6 +4,7 @@ const dotenv = require('dotenv').config();
 const authRoute = require('./routes/auth');
 const profileRoute = require('./routes/profile');
 const habitRoute = require('./routes/habit');
+const todoRoute = require('./routes/todo');
 const quoteRoute = require('./routes/quote');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
@@ -34,6 +35,7 @@ const frontendURL = process.env.FRONTEND_URL;
 app.use('/auth', authRoute);
 app.use('/profile', profileRoute);
 app.use('/habit', habitRoute);
+app.use('/todo', todoRoute);
 app.use('/quote', quoteRoute);
 
 //cronjobes
