@@ -39,7 +39,7 @@ const CountdownTimer = () => {
         { value: timeLeft.hours, label: "Hours" },
         { value: timeLeft.minutes, label: "Minutes" },
         { value: timeLeft.seconds, label: "Seconds" },
-      ].map((item, index) => (
+      ].map((item) => (
         <div key={item.label} className="flex flex-col items-center">
           <div className="bg-gradient-to-br from-cyan-400 to-blue-500 text-gray-900 font-bold text-2xl md:text-3xl w-16 h-16 md:w-20 md:h-20 rounded-2xl flex items-center justify-center shadow-lg shadow-cyan-500/25 transform hover:scale-105 transition-all duration-300">
             {String(item.value).padStart(2, "0")}
@@ -161,6 +161,7 @@ const ComingSoon = () => {
               { Icon: Instagram, href: "#", label: "Instagram" },
               { Icon: Mail, href: "#", label: "Email" },
               { Icon: Github, href: "#", label: "GitHub" },
+            // eslint-disable-next-line no-unused-vars
             ].map(({ Icon, href, label }) => (
               <a
                 key={label}
