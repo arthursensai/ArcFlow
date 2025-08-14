@@ -3,13 +3,11 @@ import prisma from "@/lib/prisma";
 interface HabitPageProps {
   params: Promise<{
     habitID: string[];
-  }> | {
-    habitID: string[];
-  };
+  }>;
 }
 
 const page = async ({ params }: HabitPageProps) => {
-  const resolvedParams = params instanceof Promise ? await params : params;
+  const resolvedParams = await params;
   
   if (!resolvedParams.habitID?.length) {
     return <div>No habit ID provided</div>;
