@@ -1,26 +1,28 @@
 import prisma from "@/lib/prisma";
 
 interface HabitPageProps {
-  params: {
+  params: Promise<{
+    habitID: string[];
+  }> | {
     habitID: string[];
   };
 }
 
 const page = async ({ params }: HabitPageProps) => {
-  const resolvedParams = await params;
-  const habitId = resolvedParams.habitID[0];
-
-  const habit = await prisma.habit.findUnique({ where: { id: habitId } });
-
-  if (!habitId) {
+  const resolvedParams = params instanceof Promise ? await params : params;
+  
+  if (!resolvedParams.habitID?.length) {
     return <div>No habit ID provided</div>;
   }
+
+  const habitId = resolvedParams.habitID[0];
+  const habit = await prisma.habit.findUnique({ where: { id: habitId } });
 
   return (
     <div>
       <h1>Habit ID: {habitId}</h1>
-        <h1>{habit?.title}</h1>
-        <p>{habit?.description}</p>
+      <h1>{habit?.title}</h1>
+      <p>{habit?.description}</p>
     </div>
   );
 };
