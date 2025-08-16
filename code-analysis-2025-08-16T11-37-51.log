@@ -1,0 +1,61 @@
+Code Analysis Log - 2025-08-16T11:37:51.788Z
+===========================================
+
+Summary:
+- Total lines of code: 2198
+- Files counted: 48
+
+File Details:
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\api\auth\[...nextauth]\route.ts - 2 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\api\habits\route.ts - 27 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\api\habits\[...habitID]\route.ts - 36 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\api\profile\route.ts - 44 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\auth\page.tsx - 26 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\habits\[...habitID]\page.tsx - 75 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\layout.tsx - 25 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\not-found.tsx - 23 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\page.tsx - 34 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\privacy\page.tsx - 49 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\app\terms\page.tsx - 43 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\auth.ts - 73 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\calendar-18.tsx - 22 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\Clock.tsx - 37 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\GithubLogin.tsx - 32 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\GoogleLogin.tsx - 36 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\Habits.tsx - 183 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\LoginForm.tsx - 40 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\LoginLink.tsx - 34 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\Logout.tsx - 19 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\MainTitle.tsx - 15 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\Navbar.tsx - 29 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\ProfileSettings.tsx - 128 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\Progress.tsx - 9 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\Quote.tsx - 92 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\SpotifyConnect.tsx - 30 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\StartTracking.tsx - 95 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\StoreSync.tsx - 25 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\ui\button.tsx - 60 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\ui\calendar.tsx - 214 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\ui\card.tsx - 93 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\ui\checkbox.tsx - 33 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\ui\dialog.tsx - 144 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\ui\input.tsx - 22 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\components\ui\label.tsx - 25 lines (.tsx)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\lib\defaultHabits.ts - 59 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\lib\font.ts - 27 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\lib\getInitialUser.ts - 1 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\lib\habitsConnections.ts - 49 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\lib\prisma.ts - 11 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\lib\SignIn.ts - 16 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\lib\utils.ts - 7 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\middleware.ts - 18 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\next-env.d.ts - 6 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\next.config.ts - 10 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\stores\habitsStore.ts - 22 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\stores\userStore.ts - 20 lines (.ts)
+C:\Users\hp\OneDrive\Desktop\arcflow-v2\total.js - 78 lines (.js)
+
+Extensions breakdown:
+.ts: 17 files
+.tsx: 30 files
+.js: 1 files
