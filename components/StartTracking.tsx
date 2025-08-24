@@ -12,7 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { Habit } from "@prisma/client";
-import getHabits from "@/lib/getHabits";
+import { getHabits } from "@/lib/habitsConnections";
 import Link from "next/link";
 
 const StartTracking = () => {
