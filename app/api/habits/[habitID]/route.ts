@@ -4,10 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  context: { params: { habitID: string[] } }
+  { params }: { params: { habitID: string } }
 ) {
-  const params = await context.params;
-  const habitID = params.habitID[0];
+  const { habitID } = await params;
 
   const session = await auth();
 
