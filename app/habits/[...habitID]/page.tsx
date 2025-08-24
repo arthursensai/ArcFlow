@@ -13,11 +13,11 @@ import { Label } from "@/components/ui/label";
 import ProgressCalendar from "@/components/Calendar";
 import Todos from "@/components/Todos";
 
-export default async function HabitPage({
+const page = async ({
   params,
 }: {
-  params: { habitID: string[] };
-}) {
+  params: Promise<{ habitID: string[] }>;
+}) => {
   const { habitID } = await params;
   const habitId = habitID[0];
 
@@ -67,3 +67,5 @@ export default async function HabitPage({
     return <div>Error loading habit</div>;
   }
 }
+
+export default page;
